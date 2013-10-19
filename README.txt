@@ -1,3 +1,10 @@
+this is a fork of: 
+
+     https://code.google.com/p/gdata-python-client/
+
+unfortunately, that repo uses mercurial
+
+
  Copyright (C) 2006-2010 Google Inc.
 
  Licensed under the Apache License, Version 2.0 (the "License");
