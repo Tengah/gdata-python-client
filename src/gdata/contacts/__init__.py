@@ -120,6 +120,68 @@ class OrgJobDescription(GDataBase):
 
   _tag = 'orgJobDescription'
 
+class GivenName(GDataBase):
+
+  _tag = 'givenName'
+ 
+class AdditionalName(GDataBase):
+  _tag = 'additionalName' 
+   
+class FamilyName(GDataBase):
+  _tag = 'familyName'
+
+class NamePrefix(GDataBase):
+  _tag = 'namePrefix'
+  
+class NameSuffix(GDataBase):
+  _tag = 'nameSuffix'
+  
+class FullName(GDataBase):
+  _tag = 'fullName'
+
+class Name(GDataBase):
+  """The gd:name element.
+
+  Allows storing person's name in a structured way. Consists of
+  given name, additional name, family name, prefix, suffix and full name.
+  """
+  _tag = 'name'
+  _children = GDataBase._children.copy()
+  _attributes = GDataBase._attributes.copy()
+  _attributes['label'] = 'label'
+  _attributes['rel'] = 'rel'
+  _attributes['primary'] = 'primary'
+  _children['{%s}givenName' % GDataBase._namespace] = (
+      'given_name', GivenName)
+  _children['{%s}additionalName' % GDataBase._namespace] = (
+      'additional_name', AdditionalName)
+  _children['{%s}familyName' % GDataBase._namespace] = (
+      'family_name', FamilyName)
+  _children['{%s}namePrefix' % GDataBase._namespace] = (
+      'name_prefix', NamePrefix)
+  _children['{%s}nameSuffix' % GDataBase._namespace] = (
+      'name_suffix', NameSuffix)
+  _children['{%s}fullName' % GDataBase._namespace] = (
+      'full_name', FullName)
+      
+  def __init__(self, label=None, rel=None, primary='false', given_name=None,
+               additional_name=None, family_name=None, name_prefix=None,
+               name_suffix=None, full_name=None, text=None,
+               extension_elements=None, extension_attributes=None):
+    GDataBase.__init__(self, text=text, extension_elements=extension_elements,
+                       extension_attributes=extension_attributes)
+    self.label = label
+    self.rel = rel or REL_OTHER
+    self.primary = primary
+    self.given_name = given_name
+    self.additional_name = additional_name
+    self.family_name = family_name
+    self.name_prefix = name_prefix
+    self.name_suffix = name_suffix
+    self.full_name = full_name
+
+  
+  
 
 class Where(GDataBase):
   """The Google Contacts Where element."""
@@ -508,6 +570,7 @@ class PersonEntry(gdata.BatchEntry):
   _children['{%s}structuredPostalAddress' % gdata.GDATA_NAMESPACE] = (
       'structured_postal_address', [StructuredPostalAddress])
   _children['{%s}email' % gdata.GDATA_NAMESPACE] = ('email', [Email])
+  _children['{%s}name' % gdata.GDATA_NAMESPACE] = ('name', Name)
   _children['{%s}im' % gdata.GDATA_NAMESPACE] = ('im', [IM])
   _children['{%s}relation' % CONTACTS_NAMESPACE] = ('relation', [Relation])
   _children['{%s}userDefinedField' % CONTACTS_NAMESPACE] = (
@@ -526,7 +589,7 @@ class PersonEntry(gdata.BatchEntry):
                title=None, updated=None, organization=None, phone_number=None,
                nickname=None, occupation=None, gender=None, birthday=None,
                postal_address=None, structured_postal_address=None, email=None,
-               im=None, relation=None, user_defined_field=None, website=None,
+               name=None, im=None, relation=None, user_defined_field=None, website=None,
                external_id=None, event=None, batch_operation=None,
                batch_id=None, batch_status=None, text=None,
                extension_elements=None, extension_attributes=None, etag=None):
@@ -545,6 +608,7 @@ class PersonEntry(gdata.BatchEntry):
     self.postal_address = postal_address or []
     self.structured_postal_address = structured_postal_address or []
     self.email = email or []
+    self.name = name
     self.im = im or []
     self.relation = relation or []
     self.user_defined_field = user_defined_field or []
@@ -579,7 +643,7 @@ class ContactEntry(PersonEntry):
                title=None, updated=None, organization=None, phone_number=None,
                nickname=None, occupation=None, gender=None, birthday=None,
                postal_address=None, structured_postal_address=None, email=None,
-               im=None, relation=None, user_defined_field=None, website=None,
+               name=None, im=None, relation=None, user_defined_field=None, website=None,
                external_id=None, event=None, batch_operation=None,
                batch_id=None, batch_status=None, text=None,
                extension_elements=None, extension_attributes=None, etag=None,
@@ -593,7 +657,7 @@ class ContactEntry(PersonEntry):
                          gender=gender, birthday=birthday,
                          postal_address=postal_address,
                          structured_postal_address=structured_postal_address,
-                         email=email, im=im, relation=relation,
+                         email=email, name=name, im=im, relation=relation,
                          user_defined_field=user_defined_field,
                          website=website, external_id=external_id, event=event,
                          batch_operation=batch_operation, batch_id=batch_id,
